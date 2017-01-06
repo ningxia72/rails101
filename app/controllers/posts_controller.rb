@@ -7,12 +7,11 @@ class PostsController < ApplicationController
     end
 
     def create
-      @group = Group.find(params[:group_id])
-      @post = Post.new(post_params)
-      @post.group = @group
-      @post.user = current_user
+    @group = Group.new(group_params)
+    @group.user = current_user
+    if @group.save
 
-      if @post.save
+        current_user.join!(@group)
         redirect_to group_path(@group)
       else
         render :new
